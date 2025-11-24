@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang=en><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>Flat Cake — Candles</title><link rel=stylesheet href=/cake.deb011c6.css><style>.wish-popup{backdrop-filter:blur(3px);z-index:99999;opacity:0;pointer-events:none;background:#1108162e;justify-content:center;align-items:center;transition:opacity .26s;display:flex;position:fixed;inset:0}.wish-popup.show{opacity:1;pointer-events:auto}.wish-box{text-align:center;background:linear-gradient(#fff7fb,#fff0f5);border:3px solid #ff6f9114;border-radius:16px;min-width:260px;max-width:88%;padding:22px 28px;animation:.32s cubic-bezier(.2,.9,.2,1) forwards popWish;box-shadow:0 20px 60px #1808202e}.wish-box h2{color:#ff6f91;margin:0 0 6px;font-family:Lobster,cursive;font-size:22px}.wish-box p{color:#6f2f3e;margin:0 0 14px;font-size:15px;line-height:1.3}.wish-box .ok-btn{appearance:none;color:#fff;cursor:pointer;background:linear-gradient(90deg,#ffb3c8,#ff8aa1);border:none;border-radius:999px;padding:8px 14px;font-weight:600;box-shadow:0 8px 22px #ff6f9124}@keyframes popWish{0%{opacity:0;transform:scale(.7)}60%{opacity:1;transform:scale(1.06)}to{opacity:1;transform:scale(1)}}@media (width<=420px){.wish-box{padding:18px 20px}.wish-box h2{font-size:20px}.wish-box p{font-size:14px}}</style><body>
+  <main class=page>
+    <section class=card aria-labelledby=title>
+      <h1 id=title class=title>Make a Wish</h1>
+
+      <div class=bg-deco aria-hidden=true></div>
+
+      <div class=controls-top>
+        <label for=candleCount>Candles</label>
+        <div class=candle-controls>
+          <button id=decCand>−</button>
+          <input id=candleCount type=range min=1 max=12 value=3>
+          <button id=incCand>+</button>
+          <span id=candleLabel>3</span>
+        </div>
+      </div>
+
+      <div class=cake-wrap id=cakeWrap tabindex=0 role=region aria-label="Cake with candles">
+        <svg xmlns:xmlns=http://www.w3.org/2000/svg aria-hidden=false class=cake-svg role=img viewBox="0 0 520 360"><ellipse cx=260 cy=320 fill=#efe9f1 rx=180 ry=18 /><ellipse cx=260 cy=280 fill=#ebc8dc14 rx=160 ry=28 /><g id=layer-bottom transform="translate(60 140)"><rect width=400 height=120 fill=#ffdbe6 rx=20 /><path fill=#ffeef4 d="M0 22c36-18 72 8 120 8s36-26 88-14 88 28 132 12 60-18 60-18v92H0Z" class=drip /><rect width=400 height=14 y=98 fill=#ff9fb8 rx=7 /><g fill=#fff opacity=.9><rect width=6 height=2 x=80 y=38 rx=1 transform="rotate(-18 80 38)"/><rect width=6 height=2 x=160 y=64 rx=1 transform="rotate(12 160 64)"/><rect width=6 height=2 x=240 y=48 rx=1 transform="rotate(-28 240 48)"/><rect width=6 height=2 x=320 y=56 rx=1 transform="rotate(14 320 56)"/></g></g><g id=layer-mid transform="translate(120 100)"><rect width=280 height=56 fill=#ffe6ef rx=12 /><rect width=280 height=6 y=44 fill=#ffb1c7 rx=3 /></g><g id=top-pill transform="translate(160 64)"><rect width=200 height=44 fill=#ffdfea rx=12 /><rect width=164 height=6 x=18 y=24 fill=#ff9fb8 rx=3 /></g></svg>
+      </div>
+
+      <div class=controls>
+        <button id=blowBtn>Blow out</button>
+        <button id=makeAWish>Make a wish ✨</button>
+        <button id=relightAll class=secondary>Relight all</button>
+      </div>
+
+    </section>
+  </main>
+
+  
+  <div id=wishPopup class=wish-popup role=dialog aria-hidden=true aria-modal=true aria-labelledby=wishTitle>
+    <div class=wish-box role=document>
+      <h2 id=wishTitle>🎀 Make a Wish</h2>
+      <p id=wishMsg>May all your wishes come true — may today be full of love and magic 💖</p>
+      <div style=justify-content:center;display:flex>
+        <button id=closeWish class=ok-btn aria-label="Close wish popup">Okay 💗</button>
+      </div>
+    </div>
+  </div>
+
+  <script type=module src=/cake.86437801.js></script>
+
+  <script>!function(){let e=document.getElementById("makeAWish"),t=document.getElementById("wishPopup"),i=document.getElementById("closeWish"),n=document.getElementById("wishMsg");function a(){t.classList.remove("show"),t.setAttribute("aria-hidden","true"),t._autoHideTimer&&(clearTimeout(t._autoHideTimer),t._autoHideTimer=null)}e&&t&&i&&(e.addEventListener("click",e=>{let i=["May all your wishes come true, my love 💖","Wishing you every happiness today and always ✨","Make a wish — I will hold it in my heart for you 💗"];!function(e,i=4e3){e&&(n.textContent=e),t.classList.add("show"),t.setAttribute("aria-hidden","false"),i&&i>0&&(clearTimeout(t._autoHideTimer),t._autoHideTimer=setTimeout(a,i))}(i[Math.floor(Math.random()*i.length)],4500)}),i.addEventListener("click",a),t.addEventListener("click",e=>{e.target===t&&a()}),document.addEventListener("keydown",e=>{"Escape"===e.key&&t.classList.contains("show")&&a()}),e.addEventListener("click",()=>{setTimeout(()=>{i.focus()},100)}))}();</script>
+
+
