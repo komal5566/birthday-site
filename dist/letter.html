@@ -1,0 +1,367 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Love Letter — For You</title>
+    <style>:root {
+  --bg1: #fff7fb;
+  --bg2: #fff0f5;
+  --accent1: #ff8aa1;
+  --accent2: #ff6f91;
+  --muted: #6b6170;
+  --card: #fffffffa;
+  --shadow: 0 28px 60px #110c220f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(180deg, var(--bg1), var(--bg2));
+  color: #3c2a36;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 40px;
+  font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, Helvetica Neue, Arial;
+  display: flex;
+}
+
+.letter-wrap {
+  background: var(--card);
+  width: 100%;
+  max-width: 920px;
+  box-shadow: var(--shadow);
+  border: 1px solid #ff6f9108;
+  border-radius: 18px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.flag-strip {
+  opacity: .14;
+  filter: blur(2px);
+  pointer-events: none;
+  width: 760px;
+  height: 80px;
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+header.letter-head {
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+  display: flex;
+}
+
+.avatar {
+  background: linear-gradient(180deg, var(--accent1), var(--accent2));
+  color: #fff;
+  border-radius: 18px;
+  justify-content: center;
+  align-items: center;
+  width: 86px;
+  height: 86px;
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  box-shadow: 0 12px 30px #ff6f911f;
+}
+
+.title {
+  color: #7b2d5a;
+  margin: 0;
+  font-family: Lobster, cursive;
+  font-size: 34px;
+  line-height: 1;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 6px;
+  font-size: 14px;
+}
+
+.letter-body {
+  align-items: flex-start;
+  gap: 28px;
+  margin-top: 18px;
+  display: flex;
+}
+
+.message {
+  color: #3a2b35;
+  background: linear-gradient(#ffffffb3, #ffffffdb);
+  border-radius: 14px;
+  flex: 1;
+  padding: 22px;
+  font-size: 16px;
+  line-height: 1.55;
+  position: relative;
+  box-shadow: inset 0 8px 30px #110c220a;
+}
+
+.message p {
+  margin: 0 0 14px;
+}
+
+.message .closing {
+  color: #7b2d5a;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.side-card {
+  flex-direction: column;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+  width: 260px;
+  display: flex;
+}
+
+.photo {
+  background: linear-gradient(#fff6, #ffffff40);
+  border: 6px solid #ffffff80;
+  border-radius: 14px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 18px 40px #110c220f;
+}
+
+.photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.controls {
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  display: flex;
+}
+
+.btn {
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  border: none;
+  border-radius: 999px;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: transform .18s, box-shadow .18s;
+  display: inline-flex;
+  box-shadow: 0 10px 28px #ff6f9124;
+}
+
+.btn.ghost {
+  color: #7b2d5a;
+  background: #fff;
+  border: 1px solid #7b2d5a0f;
+  box-shadow: 0 6px 18px #110c220a;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.back {
+  background: linear-gradient(90deg, #ff8aa1, #ff6f91);
+}
+
+.btn.music {
+  background: linear-gradient(90deg, #ff9ac2, #ff6fa3);
+}
+
+.btn.music:hover {
+  transform: translateY(-3px);
+}
+
+.hearts {
+  pointer-events: none;
+  opacity: .9;
+  background-image: radial-gradient(circle at 20% 20%, #ff6f911f 0 8%, #0000 9%), radial-gradient(circle at 80% 30%, #ffafbf14 0 9%, #0000 10%);
+  width: 220px;
+  height: 220px;
+  position: absolute;
+  bottom: -20px;
+  right: -40px;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(18px)scale(.9);
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-140px)scale(1.05);
+  }
+}
+
+.floating-heart {
+  opacity: 0;
+  background: #ff6f7a;
+  border-radius: 4px 4px 0 0;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  transform: rotate(-45deg);
+  box-shadow: 0 6px 18px #7b2d5a1f;
+}
+
+.floating-heart:before, .floating-heart:after {
+  content: "";
+  background: #ff6f7a;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  top: -9px;
+  left: 0;
+}
+
+.h1 {
+  animation: 4.2s ease-in-out infinite floatUp;
+  bottom: 20px;
+  left: 30px;
+}
+
+.h2 {
+  animation: 3.8s ease-in-out .3s infinite floatUp;
+  bottom: 30px;
+  left: 70px;
+}
+
+.h3 {
+  animation: 4.7s ease-in-out .7s infinite floatUp;
+  bottom: 12px;
+  left: 120px;
+}
+
+.h4 {
+  animation: 4.3s ease-in-out 1.2s infinite floatUp;
+  bottom: 40px;
+  left: 160px;
+}
+
+@media (width <= 960px) {
+  .letter-body {
+    flex-direction: column-reverse;
+    gap: 18px;
+  }
+
+  .side-card {
+    width: 100%;
+  }
+
+  .svg-deco {
+    display: none;
+  }
+}
+</style>
+  </head>
+  <body>
+    <main class="letter-wrap" role="main" aria-labelledby="letterTitle">
+      <div class="flag-strip" aria-hidden="true"></div>
+
+      <header class="letter-head" aria-hidden="false">
+        <div class="avatar" aria-hidden="true">💌</div>
+        <div>
+          <h1 id="letterTitle" class="title">A Letter for My Popcorn</h1>
+          <div class="subtitle">
+            Little words, big heart — read me when you need a smile ❤️
+          </div>
+        </div>
+      </header>
+
+      <section class="letter-body">
+        <article class="message" aria-label="Love letter content">
+          <p>My Love,</p>
+
+          <p>
+            Happy Birthday, baby. ❤️ Aaj ka din sirf tumhara hai, aur main
+            chahti hoon ki tumhe har pal yeh feel ho ki tum kitne special ho…
+            mere liye. Tumne meri zindagi mein woh khushiyaan bhar di hain jinka
+            main sirf sapna dekhti thi. Tumhare saath har din zyada bright,
+            zyada peaceful, aur zyada pyaara lagta hai.
+          </p>
+
+          <p>
+            Is naye saal mein main tumhare liye sirf best wish karti hoon, woh
+            success jo tum deserve karte ho, woh happiness jo tumhari zindagi ko
+            fulfill kare, aur woh love jo kabhi kam na ho. Thank you, baby, for
+            loving me the way you do and for choosing me, for standing by me, and
+            for making me feel like the luckiest girl alive. Main hamesha
+            grateful rahungi ki mujhe tum jaise insaan mila. Enjoy your special
+            day, meri bholu. Aaj ke din bas smile karte rehna, khush rehna, aur
+            mujhe apne paas rehne dena. I love you more than words can ever
+            explain. 🎉🎂
+          </p>
+
+          <p class="closing">
+            With all my heart, <br><strong>Hamesha Teri Meenu 🌻.</strong>
+          </p>
+        </article>
+
+        <aside class="side-card" aria-label="Photo and actions">
+          <div class="photo" aria-hidden="false">
+            <!-- using uploaded image path as requested -->
+            <img src="/img021.3dda883d.jpg" alt="Our photo">
+          </div>
+
+          <div class="controls" role="toolbar" aria-label="Letter actions">
+            <button class="btn back" id="backBtn" title="Go back">
+              ⟵ Back
+            </button>
+
+            <button class="btn music" id="musicBtn" title="Play favorite song">
+              🎧 Fav Music
+            </button>
+          </div>
+        </aside>
+      </section>
+
+      <!-- subtle floating hearts -->
+      <div class="hearts" aria-hidden="true">
+        <span class="floating-heart h1"></span>
+        <span class="floating-heart h2"></span>
+        <span class="floating-heart h3"></span>
+        <span class="floating-heart h4"></span>
+      </div>
+    </main>
+
+    <script>// Download the uploaded image file (provided path)
+document.getElementById("backBtn").addEventListener("click", ()=>{
+    window.history.back();
+});
+// redirect to music page
+document.getElementById("musicBtn").addEventListener("click", ()=>{
+    window.location.href = "./music.html";
+});
+
+</script>
+  
+
+<script src="/letter.3beea000.js"></script></body></html>
