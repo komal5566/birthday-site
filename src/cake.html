@@ -150,7 +150,265 @@
     </div>
   </div>
 
-  <script type="module" src="./cake.ts"></script>
+  <script>
+/* cake.js (plain JS equivalent of your cake.ts) */
+
+(function () {
+  const cakeWrap = document.getElementById('cakeWrap');
+  const blowBtn = document.getElementById('blowBtn');
+  const makeAWishBtn = document.getElementById('makeAWish');
+  const relightAllBtn = document.getElementById('relightAll');
+
+  const candlesContainer = document.getElementById('candles');
+  const confettiGroup = document.getElementById('confetti');
+  const range = document.getElementById('candleCount');
+  const label = document.getElementById('candleLabel');
+  const incBtn = document.getElementById('incCand');
+  const decBtn = document.getElementById('decCand');
+
+  let candleCount = Math.max(1, Math.min(12, Number(range.value || 3)));
+  let candlesOn = [];
+  let rafHandles = [];
+
+  const rand = function (min, max) { return Math.random() * (max - min) + min; };
+
+  function createCandleSVG(index, x, yBase) {
+    var ns = 'http://www.w3.org/2000/svg';
+    var g = document.createElementNS(ns, 'g');
+    g.setAttribute('class', 'candle');
+    g.setAttribute('data-index', String(index));
+    g.setAttribute('transform', 'translate(' + x + ', ' + yBase + ')');
+
+    var rect = document.createElementNS(ns, 'rect');
+    rect.setAttribute('x', '-6');
+    rect.setAttribute('y', '-62');
+    rect.setAttribute('width', '12');
+    rect.setAttribute('height', '50');
+    rect.setAttribute('rx', '3');
+    rect.setAttribute('fill', '#ff9aa8');
+
+    var path = document.createElementNS(ns, 'path');
+    path.setAttribute('d', index % 2 === 0 ? 'M-3 -68 q6 8 0 18' : 'M6 -68 q-6 8 0 18');
+    path.setAttribute('stroke', index % 3 === 0 ? '#ff9aa8' : (index % 3 === 1 ? '#8fcfff' : '#ffd46b'));
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('fill', 'none');
+
+    var fw = document.createElementNS(ns, 'g');
+    fw.setAttribute('class', 'flameWrap');
+    fw.setAttribute('transform', 'translate(0,-82)');
+
+    var glow = document.createElementNS(ns, 'ellipse');
+    glow.setAttribute('class', 'flameGlow');
+    glow.setAttribute('cx', '0');
+    glow.setAttribute('cy', '-2');
+    glow.setAttribute('rx', String(10 + (index % 2)));
+    glow.setAttribute('ry', String(14 + (index % 2)));
+    glow.setAttribute('opacity', '0.18');
+    glow.setAttribute('fill', '#fff2b8');
+
+    var flame = document.createElementNS(ns, 'path');
+    flame.setAttribute('class', 'flame');
+    flame.setAttribute('d', 'M0 0 C4 -8 4 -16 0 -22 C-4 -16 -4 -8 0 0 Z');
+    flame.setAttribute('fill', '#ffd06b');
+
+    fw.appendChild(glow);
+    fw.appendChild(flame);
+
+    g.appendChild(rect);
+    g.appendChild(path);
+    g.appendChild(fw);
+
+    g.addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      var idx = Number(g.getAttribute('data-index'));
+      toggleCandle(idx);
+    });
+
+    return g;
+  }
+
+  function renderCandles(count) {
+    candlesContainer.innerHTML = '';
+    candlesOn = [];
+    var centerX = 260;
+    var width = 200;
+    var yBase = 90;
+    var n = Math.max(1, Math.min(12, count));
+    var step = width / n;
+    for (var i = 0; i < n; i++) {
+      var x = centerX - width / 2 + step / 2 + i * step;
+      var g = createCandleSVG(i, x, yBase);
+      candlesContainer.appendChild(g);
+      candlesOn.push(true);
+    }
+    candleCount = n;
+    if (range) range.value = String(n);
+    if (label) label.textContent = String(n);
+    refreshWrapClass();
+    startFlickers();
+  }
+
+  function startFlickers() {
+    stopFlickers();
+    var candleGroups = Array.from(candlesContainer.querySelectorAll('.candle'));
+    candleGroups.forEach(function (el, idx) {
+      var flame = el.querySelector('.flame');
+      var glow = el.querySelector('.flameGlow');
+      var t = rand(0, 1000);
+      (function frame() {
+        if (!candlesOn[idx]) return;
+        var s = 1 + Math.sin(t * 0.07 + idx) * 0.03 + (Math.random() * 0.04);
+        var rot = Math.sin(t * 0.03 + idx) * 3 + rand(-1, 1);
+        if (flame) flame.style.transform = 'scale(' + s + ') rotate(' + rot + 'deg)';
+        if (glow) glow.style.transform = 'scale(' + (1 + (s - 1) * 1.3) + ')';
+        if (flame) flame.style.opacity = (0.85 + Math.abs(Math.sin(t * 0.04)) * 0.15).toString();
+        t += 1;
+        rafHandles[idx] = requestAnimationFrame(frame);
+      })();
+    });
+  }
+
+  function stopFlickers() {
+    rafHandles.forEach(function (id) { cancelAnimationFrame(id); });
+    rafHandles = [];
+    var candleGroups = Array.from(candlesContainer.querySelectorAll('.candle'));
+    candleGroups.forEach(function (el) {
+      var flame = el.querySelector('.flame');
+      var glow = el.querySelector('.flameGlow');
+      if (flame) { flame.style.transform = 'scale(0.25)'; flame.style.opacity = '0'; }
+      if (glow) { glow.style.transform = 'scale(0.25)'; glow.style.opacity = '0'; }
+    });
+  }
+
+  function refreshWrapClass() {
+    var anyOn = candlesOn.some(Boolean);
+    if (cakeWrap) {
+      cakeWrap.classList.toggle('candle-on', anyOn);
+      cakeWrap.classList.toggle('candle-out', !anyOn);
+    }
+  }
+
+  function toggleCandle(idx, setTo) {
+    if (idx < 0 || idx >= candlesOn.length) return;
+    candlesOn[idx] = typeof setTo === 'boolean' ? setTo : !candlesOn[idx];
+    var group = candlesContainer.querySelector('.candle[data-index="' + idx + '"]');
+    if (!group) return;
+    var flame = group.querySelector('.flame');
+    var glow = group.querySelector('.flameGlow');
+    if (candlesOn[idx]) {
+      if (flame) flame.style.opacity = '1';
+      if (glow) glow.style.opacity = '0.18';
+    } else {
+      if (flame) flame.style.opacity = '0';
+      if (glow) glow.style.opacity = '0';
+      // small puff
+      var ns = 'http://www.w3.org/2000/svg';
+      var puff = document.createElementNS(ns, 'circle');
+      puff.setAttribute('cx', '0');
+      puff.setAttribute('cy', String(-94));
+      puff.setAttribute('r', '6');
+      puff.setAttribute('fill', '#e9f0ff');
+      puff.style.transition = 'transform 700ms ease, opacity 700ms ease';
+      confettiGroup.appendChild(puff);
+      setTimeout(function () {
+        puff.style.transform = 'translate(' + rand(-30, 30) + 'px, ' + rand(-120, -40) + 'px) scale(0.2)';
+        puff.style.opacity = '0';
+      }, 20);
+      setTimeout(function () { if (puff.parentNode) puff.parentNode.removeChild(puff); }, 900);
+    }
+    refreshWrapClass();
+    if (candlesOn.some(Boolean)) startFlickers(); else stopFlickers();
+  }
+
+  function blowOutAll() {
+    for (var i = 0; i < candlesOn.length; i++) toggleCandle(i, false);
+    spawnConfetti(18);
+  }
+
+  function relightAll() {
+    for (var i = 0; i < candlesOn.length; i++) toggleCandle(i, true);
+    startFlickers();
+  }
+
+  function spawnConfetti(count) {
+    for (var i = 0; i < count; i++) {
+      var kind = Math.random() > 0.5 ? 'rect' : 'circle';
+      var ns = 'http://www.w3.org/2000/svg';
+      var el = document.createElementNS(ns, kind === 'rect' ? 'rect' : 'circle');
+      var x = rand(180, 340);
+      var y = rand(10, 90);
+      if (kind === 'rect') {
+        el.setAttribute('width', '6');
+        el.setAttribute('height', '10');
+        el.setAttribute('rx', '1');
+        el.setAttribute('x', String(x));
+        el.setAttribute('y', String(y));
+      } else {
+        el.setAttribute('r', String(rand(2,5)));
+        el.setAttribute('cx', String(x));
+        el.setAttribute('cy', String(y));
+      }
+      el.setAttribute('fill', 'hsl(' + rand(10,320) + ', ' + rand(70,90) + '%, ' + rand(45,65) + '%)');
+      el.setAttribute('class', 'conf');
+      el.style.opacity = '1';
+      confettiGroup.appendChild(el);
+      (function(el){
+        setTimeout(function() {
+          var dx = rand(-160, 160);
+          var dy = rand(80, 220);
+          el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) rotate(' + rand(-360,360) + 'deg) scale(' + rand(0.4,1) + ')';
+          el.style.opacity = '0';
+        }, rand(20,220));
+      })(el);
+    }
+    setTimeout(function(){ confettiGroup.innerHTML = ''; }, 1200);
+  }
+
+  if (range) {
+    range.addEventListener('input', function () {
+      var n = Math.max(1, Math.min(12, Number(range.value)));
+      if (label) label.textContent = String(n);
+      renderCandles(n);
+    });
+  }
+  if (incBtn) incBtn.addEventListener('click', function () {
+    var n = Math.min(12, candleCount + 1);
+    renderCandles(n);
+  });
+  if (decBtn) decBtn.addEventListener('click', function () {
+    var n = Math.max(1, candleCount - 1);
+    renderCandles(n);
+  });
+
+  if (blowBtn) blowBtn.addEventListener('click', blowOutAll);
+  if (relightAllBtn) relightAllBtn.addEventListener('click', relightAll);
+  if (makeAWishBtn) makeAWishBtn.addEventListener('click', function () {
+    if (!candlesOn.some(Boolean)) {
+      var mid = Math.floor(candlesOn.length / 2);
+      toggleCandle(mid, true);
+    }
+    spawnConfetti(30);
+  });
+
+  if (cakeWrap) {
+    cakeWrap.addEventListener('click', function() {
+      var mid = Math.floor(candlesOn.length / 2);
+      toggleCandle(mid);
+    });
+  }
+
+  document.addEventListener('keydown', function (ev) {
+    if ((ev.code === 'Space' || ev.key === ' ') && (document.activeElement === document.body || document.activeElement === cakeWrap)) {
+      ev.preventDefault();
+      var mid = Math.floor(candlesOn.length / 2);
+      toggleCandle(mid);
+    }
+  });
+
+  renderCandles(candleCount);
+})();
+</script>
+
 
   <script>
     // Small helper script to show the "Make a Wish" popup when the Make a wish button is clicked.

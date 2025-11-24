@@ -4,15 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "parcel src/index.html src/celebration.html src/letter.html src/music.html",
+    "build": "parcel build src/index.html src/celebration.html src/letter.html src/music.html"
   },
   "dependencies": {
     "lit": "^3.3.1"
   },
   "devDependencies": {
-    "typescript": "~5.9.3",
-    "vite": "^7.2.4"
+    "@parcel/transformer-raw": "^2.16.1",
+    "esbuild": "^0.27.0",
+    "parcel": "^2.16.1",
+    "typescript": "~5.9.3"
   }
 }

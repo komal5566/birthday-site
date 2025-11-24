@@ -158,8 +158,7 @@
         transform: translateX(-50%);
         width: 820px;
         height: 96px;
-        background: url("/mnt/data/411a1a22-b4a9-4a3d-bb52-48532e73eef8.png")
-          center/cover no-repeat;
+        background: url("./assets/banner.png") center/cover no-repeat;
         opacity: 0.08;
         filter: blur(3px);
         pointer-events: none;
@@ -485,8 +484,7 @@
       }
     </style>
   </head>
-<body class="fade-page">
-
+  <body class="fade-page">
     <main class="wrap" role="main" aria-label="Favorite music">
       <div class="banner-ghost" aria-hidden="true"></div>
 
@@ -503,15 +501,11 @@
               💌 Letter
             </button>
           </div>
-      
         </header>
 
         <section class="now-card" aria-live="polite">
           <div class="cover" id="nowCover">
-            <img
-              src="/mnt/data/A_love_letter_written_on_textured_parchment_paper_.png"
-              alt="cover art"
-            />
+            <img src="./assets/img022.jpg" alt="cover art" />
           </div>
           <div class="track-meta">
             <div class="track-title" id="nowTitle">Pick a song</div>
@@ -563,10 +557,7 @@
         <div class="panel">
           <h3>Now playing art</h3>
           <div class="cover-large" id="coverLarge">
-            <img
-              src="/mnt/data/A_love_letter_written_on_textured_parchment_paper_.png"
-              alt="big cover"
-            />
+            <img src="./assets/img022.jpg" alt="cover" />
           </div>
 
           <div class="navs">
@@ -594,60 +585,73 @@
       <div class="deco-heart">❤</div>
     </main>
 
-    <script>
-      /* -------------------------
-         Keep your original JS logic
-         (copied from your file, untouched)
-         ------------------------- */
-      function spawnHearts() {
-        const heart = document.createElement("div");
-        heart.className = "float-heart";
-        heart.textContent = "❤";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.animationDuration = 4 + Math.random() * 4 + "s";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 8000);
-      }
-      setInterval(spawnHearts, 1200);
-      const tracks = [
-        {
-          title: "Mere Liye Tum Kafhi Ho",
-          artist: "Ayushman Khurana",
-          src: "./assets/MereLiyeTumKaafiHo.mp3",
-          cover: "./assets/img022.jpg",
-        },
-        {
-          title: "Aashiq Tera",
-          artist: "Sohail Sen, Altamash Faridi",
-          src: "./assets/AashiqTera.mp3",
-          cover: "./assets/img024.jpg",
-        },
-        {
-          title: "I Like Me Better",
-          artist: "Lauv",
-          src: "./assets/ILikeMeBetter.mp3",
-          cover: "./assets/img010.jpg",
-        },
-      ];
+   <script type="module">
+  // at top of your existing module script
+  const cover022 = new URL('./assets/img022.jpg', import.meta.url).href;
+  const cover024 = new URL('./assets/img024.jpg', import.meta.url).href;
+  const cover010 = new URL('./assets/img010.jpg', import.meta.url).href;
+  const bannerImg = new URL('./assets/banner.png', import.meta.url).href;
+  const audioMere = new URL('./assets/MereLiyeTumKaafiHo.mp3', import.meta.url).href;
+  const audioAashiq = new URL('./assets/AashiqTera.mp3', import.meta.url).href;
+  const audioLauv = new URL('./assets/ILikeMeBetter.mp3', import.meta.url).href;
+
+  // you can update the banner background via JS (optional)
+  document.querySelector('.banner-ghost').style.backgroundImage = `url(${bannerImg})`;
+
+  const tracks = [
+    {
+      title: "Mere Liye Tum Kafhi Ho",
+      artist: "Ayushman Khurana",
+      src: audioMere,
+      cover: cover022,
+    },
+    {
+      title: "Aashiq Tera",
+      artist: "Sohail Sen, Altamash Faridi",
+      src: audioAashiq,
+      cover: cover024,
+    },
+    {
+      title: "I Like Me Better",
+      artist: "Lauv",
+      src: audioLauv,
+      cover: cover010,
+    },
+  ];
+
+      /* Quotes etc (unchanged) */
       const quotes = [
         "Tum kuchh adhoore se, Hum bhi kuchh aadhe! Aadha aadha hum jo dono mila dein, To ban jaayegi apni ek zindgaani ✨❤️",
         "Dil ke aage ye aafat badi hai, Khwahishein phir bhi zidd pe adi hai... Hum se mayoos hoga zamaana, Par zamaane ki kisko padi hai 🎶💗",
         "I like me better when I'm with you, I knew from the first time.. I'd stay for a long time 'cause, I like me better when 💞🌸",
       ];
 
+      /* player state */
       let current = 0;
       let playing = false;
       const audio = new Audio();
       audio.crossOrigin = "anonymous";
       audio.preload = "metadata";
 
+      /* DOM refs */
       const playlistEl = document.getElementById("playlist");
       const nowTitle = document.getElementById("nowTitle");
       const nowArtist = document.getElementById("nowArtist");
-      const nowCover = document.getElementById("nowCover").querySelector("img");
-      const coverLarge = document
-        .getElementById("coverLarge")
-        .querySelector("img");
+
+      const nowCoverEl = document.getElementById("nowCover");
+      let nowCoverImg = nowCoverEl.querySelector("img");
+      if (!nowCoverImg) {
+        nowCoverImg = document.createElement("img");
+        nowCoverEl.appendChild(nowCoverImg);
+      }
+
+      const coverLargeEl = document.getElementById("coverLarge");
+      let coverLargeImg = coverLargeEl.querySelector("img");
+      if (!coverLargeImg) {
+        coverLargeImg = document.createElement("img");
+        coverLargeEl.appendChild(coverLargeImg);
+      }
+
       const playBtn = document.getElementById("playPause");
       const prevBtn = document.getElementById("prevBtn");
       const nextBtn = document.getElementById("nextBtn");
@@ -657,6 +661,7 @@
       const shuffleBtn = document.getElementById("shuffleBtn");
       const loopBtn = document.getElementById("loopBtn");
 
+      /* render playlist */
       function renderPlaylist() {
         playlistEl.innerHTML = "";
         tracks.forEach((t, i) => {
@@ -664,12 +669,12 @@
           node.className = "song" + (i === current ? " active" : "");
           node.dataset.index = i;
           node.innerHTML = `
-            <div class="s-left"><img src="${t.cover}" alt=""></div>
-            <div class="s-right">
-              <div class="s-title">${t.title}</div>
-              <div class="s-artist">${t.artist}</div>
-            </div>
-          `;
+      <div class="s-left"><img src="${t.cover}" alt=""></div>
+      <div class="s-right">
+        <div class="s-title">${t.title}</div>
+        <div class="s-artist">${t.artist}</div>
+      </div>
+    `;
           node.addEventListener("click", () => {
             loadTrack(Number(node.dataset.index));
             play();
@@ -677,17 +682,19 @@
           playlistEl.appendChild(node);
         });
       }
-
       renderPlaylist();
 
+      /* load / UI sync */
       function loadTrack(i) {
         current = (i + tracks.length) % tracks.length;
         audio.src = tracks[current].src;
 
         nowTitle.textContent = tracks[current].title;
         nowArtist.textContent = tracks[current].artist;
-        nowCover.src = tracks[current].cover;
-        coverLarge.src = tracks[current].cover;
+
+        // IMPORTANT: use imported cover URL (Parcel has rewritten it)
+        nowCoverImg.src = tracks[current].cover;
+        coverLargeImg.src = tracks[current].cover;
 
         document.getElementById("heartLines").textContent = quotes[current];
 
@@ -698,6 +705,7 @@
         if (active) active.classList.add("active");
       }
 
+      /* play/pause */
       function play() {
         audio
           .play()
@@ -715,6 +723,7 @@
         playBtn.setAttribute("aria-pressed", "false");
       }
 
+      /* UI wiring */
       playBtn.addEventListener("click", () => {
         if (!audio.src) loadTrack(current);
         if (playing) pause();
@@ -740,7 +749,6 @@
       seek.addEventListener("input", () => {
         audio.currentTime = seek.value;
       });
-
       audio.addEventListener("ended", () => {
         if (loopBtn.dataset.loop === "on") {
           audio.currentTime = 0;
@@ -760,6 +768,7 @@
         return `${m}:${s}`;
       }
 
+      /* small extras (shuffle/loop/navigation) */
       shuffleBtn.addEventListener("click", () => {
         for (let i = tracks.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
@@ -803,8 +812,10 @@
           () => (window.location.href = "./celebration.html")
         );
 
+      /* initial load */
       loadTrack(0);
 
+      /* keyboard play/pause */
       window.addEventListener("keydown", (e) => {
         if (e.code === "Space" && document.activeElement === document.body) {
           e.preventDefault();
@@ -813,19 +824,12 @@
         }
       });
     </script>
+
     <div class="ribbon one"></div>
     <div class="ribbon two"></div>
     <div class="ribbon three"></div>
     <script>
-      let loveOn = false;
-      document.getElementById("loveMode").addEventListener("click", () => {
-        loveOn = !loveOn;
-        document.body.classList.toggle("love-active", loveOn);
-
-        if (loveOn) {
-          burstSparkles();
-        }
-      });
+     
 
       function burstSparkles() {
         for (let i = 0; i < 20; i++) {

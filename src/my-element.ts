@@ -1,28 +1,33 @@
 // ...existing code...
 class MyHero extends HTMLElement {
-    connectedCallback() {
-
-    const img1  = new URL('./assets/img01.jpg',  import.meta.url).href;
-    const img2  = new URL('./assets/img02.jpg',  import.meta.url).href;
-    const img3  = new URL('./assets/img03.jpg',  import.meta.url).href;
-    const img4  = new URL('./assets/img04.jpg',  import.meta.url).href;
-    const img5  = new URL('./assets/img05.jpg',  import.meta.url).href;
-    const img6  = new URL('./assets/img06.jpg',  import.meta.url).href; // left 1
-    const img7  = new URL('./assets/img07.jpg',  import.meta.url).href; // left 2
-    const img8  = new URL('./assets/img08.jpg',  import.meta.url).href; // right 1
-    const img9  = new URL('./assets/img09.jpg',  import.meta.url).href; // right 2
-    const img10 = new URL('./assets/img010.jpg', import.meta.url).href; // bottom 1
-    const img11 = new URL('./assets/img011.jpg', import.meta.url).href; // bottom 2
-    const img12 = new URL('./assets/img012.jpg', import.meta.url).href; // bottom 3
-    const img13 = new URL('./assets/img013.jpg', import.meta.url).href; // bottom 4
-    const img14 = new URL('./assets/img014.jpg', import.meta.url).href; // bottom 5
+  connectedCallback() {
+    const img1 = new URL("./assets/img01.jpg", import.meta.url).href;
+    const img2 = new URL("./assets/img02.jpg", import.meta.url).href;
+    const img3 = new URL("./assets/img03.jpg", import.meta.url).href;
+    const img4 = new URL("./assets/img04.jpg", import.meta.url).href;
+    const img5 = new URL("./assets/img05.jpg", import.meta.url).href;
+    const img6 = new URL("./assets/img06.jpg", import.meta.url).href; // left 1
+    const img7 = new URL("./assets/img07.jpg", import.meta.url).href; // left 2
+    const img8 = new URL("./assets/img08.jpg", import.meta.url).href; // right 1
+    const img9 = new URL("./assets/img09.jpg", import.meta.url).href; // right 2
+    const img10 = new URL("./assets/img010.jpg", import.meta.url).href; // bottom 1
+    const img11 = new URL("./assets/img011.jpg", import.meta.url).href; // bottom 2
+    const img12 = new URL("./assets/img012.jpg", import.meta.url).href; // bottom 3
+    const img13 = new URL("./assets/img013.jpg", import.meta.url).href; // bottom 4
+    const img14 = new URL("./assets/img014.jpg", import.meta.url).href; // bottom 5
 
     // create staggered per-character spans for the title
-    const titleText = 'Happy Birthday, Sauru';
-    const titleSpans = Array.from(titleText).map((ch, i) =>
-        `<span class="char" style="--i:${i}">${ch === ' ' ? '&nbsp;' : ch}</span>`).join('');
+    const titleText = "Happy Birthday, Sauru";
+    const titleSpans = Array.from(titleText)
+      .map(
+        (ch, i) =>
+          `<span class="char" style="--i:${i}">${
+            ch === " " ? "&nbsp;" : ch
+          }</span>`
+      )
+      .join("");
 
-        this.innerHTML = `
+    this.innerHTML = `
             <style>
                 /* Cute pastel frames with soft shadow, floating and hover effects */
                 :root { --cute-p1: #ffd8e6; --cute-p2: #fff1f6; --cute-accent: rgba(214,154,170,0.32); }
@@ -308,54 +313,53 @@ class MyHero extends HTMLElement {
               I could walk in my garden forever. 💖</p>
         `;
 
-        // attach click handler to launch confetti and animate the button
-        const cta = this.querySelector('.cta') as HTMLElement | null;
-        const hero = this.querySelector('.hero') as HTMLElement | null;
-        if (cta && hero) {
-            // ensure confetti container exists
-            let confetti = this.querySelector('.confetti') as HTMLElement | null;
-            if (!confetti) {
-                confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                hero.appendChild(confetti);
-            }
+    // attach click handler to launch confetti and animate the button
+    const cta = this.querySelector(".cta") as HTMLElement | null;
+    const hero = this.querySelector(".hero") as HTMLElement | null;
+    if (cta && hero) {
+      // ensure confetti container exists
+      let confetti = this.querySelector(".confetti") as HTMLElement | null;
+      if (!confetti) {
+        confetti = document.createElement("div");
+        confetti.className = "confetti";
+        hero.appendChild(confetti);
+      }
 
-            const launchConfetti = (count = 16) => {
-                const emojis = ['🎉','✨','🎊','💖','🌸'];
-                for (let i = 0; i < count; i++) {
-                    const el = document.createElement('span');
-                    el.className = 'confetti-item';
-                    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                    // random horizontal position within hero
-                    const left = 8 + Math.random() * 84; // keep inside edges a bit
-                    el.style.left = left + '%';
-                    // random size and delay
-                    el.style.fontSize = `${10 + Math.random() * 22}px`;
-                    el.style.animationDelay = `${Math.random() * 220}ms`;
-                    // slight horizontal variance via transform translateX
-                    el.style.transform = `translateX(${(Math.random() - 0.5) * 40}px)`;
-                    confetti!.appendChild(el);
-                    // cleanup after animation
-                    setTimeout(() => el.remove(), 2200);
-                }
-            };
-
-            // when clicked: play the button animation + confetti, then navigate to a new page
-            cta.addEventListener('click', () => {
-                cta.classList.add('active');
-                launchConfetti(18);
-
-                // keep the button active briefly to show the effect, then navigate
-                const NAV_DELAY = 1200; // ms — adjust as desired
-                setTimeout(() => {
-                    cta.classList.remove('active');
-                    // navigate to the celebration page in the src folder
-                    window.location.href = '/src/celebration.html';
-                }, NAV_DELAY);
-            });
+      const launchConfetti = (count = 16) => {
+        const emojis = ["🎉", "✨", "🎊", "💖", "🌸"];
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement("span");
+          el.className = "confetti-item";
+          el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          // random horizontal position within hero
+          const left = 8 + Math.random() * 84; // keep inside edges a bit
+          el.style.left = left + "%";
+          // random size and delay
+          el.style.fontSize = `${10 + Math.random() * 22}px`;
+          el.style.animationDelay = `${Math.random() * 220}ms`;
+          // slight horizontal variance via transform translateX
+          el.style.transform = `translateX(${(Math.random() - 0.5) * 40}px)`;
+          confetti!.appendChild(el);
+          // cleanup after animation
+          setTimeout(() => el.remove(), 2200);
         }
+      };
 
+      // when clicked: play the button animation + confetti, then navigate to a new page
+      cta.addEventListener("click", () => {
+        cta.classList.add("active");
+        launchConfetti(18);
+
+        // keep the button active briefly to show the effect, then navigate
+        const NAV_DELAY = 1200; // ms — adjust as desired
+        setTimeout(() => {
+          cta.classList.remove("active");
+          // navigate to the celebration page in the src folder
+          window.location.href = "celebration.html";
+        }, NAV_DELAY);
+      });
     }
+  }
 }
-customElements.define('my-hero', MyHero);
+customElements.define("my-hero", MyHero);
 // ...existing code...
